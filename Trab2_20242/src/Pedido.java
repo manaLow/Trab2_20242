@@ -25,9 +25,29 @@ public class Pedido {
         return s;
     }
 
-    //Exibição do Pedido - EX: "001 - Entregador: João - Cliente: Manuzinha - Sala: 904T - Itens: Coxinha, Refrigerante - Finalizado: True
+
+//Código do Pedido: PEDIDO-1
+//Produtos:
+//PROD-1: Coxinha de Frango com Catupiry (QTD: 2)
+//PROD-2: Suco de Laranja 300ml (QTD: 3)
+//PROD-3: Empadão de Camarão (QTD: 1)
+//Status: Em aberto
+//Valor total: R$39,00
     public String toString(){
-        return this.cod + " - Entregador: " + this.entregador + " - Cliente: " + this.cliente + " - Sala: " + this.s + " - Itens: " + this.carrinho + " - Finalizado: " + this.entregue;
+        String msg = "Código do Pedido: " + this.cod + "\n" +
+                "Produtos:\n";
+            for (Item i : carrinho) {
+                msg += i.toString() + "\n";
+            }
+            msg += "Status: ";
+            if(entregue){
+                msg += "Entregue\n";
+            }
+            else {
+                msg += "Em aberto\n";
+            }
+            msg += "Valor Total: R$" + String.format("%2f",this.valorTotal()) + "\n";
+            return msg;
     }
 
     //Atribuir aluno a função de entregador

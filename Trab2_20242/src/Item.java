@@ -15,7 +15,7 @@ public class Item {
     @Override
     //Exibição de itens
     public String toString() {
-        return (this.p.getNome() + " " + "(QTD: " + this.quantidade + ")");
+        return (this.p.getNome() + " (QTD: " + this.quantidade + ")");
 
     }
 

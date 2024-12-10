@@ -140,10 +140,10 @@ public class Entrada {
         int op = this.lerInteiro(msg);
 
         while (op != 0) {
-            if (op == 1) {/*fazerPedido(a, s);*/}
-            if (op == 2) {/*entregarPedido(a, s);*/}
-            if (op == 3) {/*listarPedidos(a, s);*/}
-            if (op == 4) {/*inserirCredito(a, s);*/}
+            if (op == 1) {fazerPedido(a, s);}
+            if (op == 2) {entregarPedido(a, s);}
+            if (op == 3) {listarPedidos(a, s);}
+            if (op == 4) {inserirCredito(a, s);}
             if (op < 0 || op > 4) System.out.println("Opção inválida. Tente novamente: ");
 
             op = this.lerInteiro(msg);
@@ -269,12 +269,8 @@ public class Entrada {
         Pedido p = new Pedido(cod, a);
 
         s.listarSalas();
-        String sala = this.lerLinha("Digite a sala: ");
-        for (Sala sal : s.salas) {
-            if (sal.toString().equals(sala)) {
-                p.setS(sal);
-            }
-        }
+        Sala sal = lerSala(s);
+        p.setS(sal);
 
         String msg = "Escolha uma opção:\n" +
                 "1) Inserir produto no carrinho." +
@@ -283,26 +279,25 @@ public class Entrada {
 
         while (op == 1) {
             s.listarProdutos(); // Mostra os produtos disponíveis
-
-            String cod_prod = this.lerLinha("Digite o código do produto: ");
-            Produto prod = buscarProdutoPorCodigo(s, cod_prod);
-
-            if (prod == null) {
-                System.out.println("Produto não encontrado. Tente novamente.");
-            } else {
-                int qtd = solicitarQuantidade(prod);
-                Item item = new Item(qtd, prod);
+            Item item = lerItem(s);
+            if(p.valorTotal() <= a.getSaldo()){
                 p.adicionarItem(item);
-                System.out.println("Produto adicionado ao carrinho: " + prod + " (Quantidade: " + qtd + ")");
+                System.out.println("Produto adicionado ao carrinho: " + item.toString());
+            }
+            else{
+                System.out.println("Você não possui saldo o suficiente. Tente novamente.");
             }
 
             op = lerInteiro(msg); // Reexibe o menu
         }
 
         if (op == 2) {
+            s.addPedido(p);
+            p.confirmar();
             System.out.println("Pedido finalizado.");
+
         } else {
-            System.out.println("Opção inválida. Saindo...");
+            System.out.println("Opção inválida.");
         }
     }
 
@@ -342,19 +337,26 @@ public class Entrada {
         System.out.println("Código do pedido indisponível.");
     }
 
+    public void inserirCredito (Aluno a, Sistema s){
+        double valor = this.lerInteiro("Digite o valor de crédito: ");
+        a.inserirSaldo(valor);
+    }
 
-    /*
-     *  CadAlunos
-     * CadSalas
-     * CadProdutos
-     * fazerPedido
-     * entregarPedido
-     * Listar pedido
-     * inserirCredito
-     * lerSala
-     * lerItem
-     *
-     * */
+    public void listarPedidos(Aluno a, Sistema s){
+        Pedido [] pedidosDisponiveis = s.filtrarPedidos(a);
+
+        //Verificar se há pedidos disponíveis
+        if(pedidosDisponiveis.length == 0){
+            System.out.println("Não há pedidos relacionados a este aluno.");
+            return;
+        }
+
+        //Exibir pedidos disponíveis
+        System.out.println("Pedidos:");
+        for(Pedido pedido : pedidosDisponiveis){
+            System.out.println(pedido.toString());
+        }
+    }
 
     private Produto buscarProdutoPorCodigo(Sistema s, String cod_prod) {
         for (Produto prod : s.prods) {
@@ -365,19 +367,43 @@ public class Entrada {
         return null; // Retorna null se não encontrar
     }
 
-    // Método para solicitar quantidade válida
+    // Solicitando uma quantidade válida
     private int solicitarQuantidade(Produto prod) {
         int qtd;
         while (true) {
-            qtd = lerInteiro("Digite a quantidade de " + prod + " no pedido: ");
+            qtd = lerInteiro("Digite a quantidade de "+ prod.toString() +" no pedido: ");
             if (qtd > prod.getQtd()) {
                 System.out.println("Quantidade não disponível no estoque. Possuímos " + prod.getQtd() + ". Tente novamente.");
-            } else {
+            }
+            else {
                 return qtd; // Retorna a quantidade válida
             }
         }
+
     }
 
+    private Sala lerSala (Sistema s){
+        String sala = this.lerLinha("Digite a sala: ");
+        for (Sala sal : s.salas) {
+            if (sal.toString().equals(sala)) {
+                return sal;
+            }
+        }
+        return null;
+    }
+
+    private Item lerItem (Sistema s){
+        String cod_prod = this.lerLinha("Digite o código do produto: ");
+        Produto prod = buscarProdutoPorCodigo(s, cod_prod);
+        if(prod != null){
+            int qtd = solicitarQuantidade(prod);
+            return new Item(qtd, prod);
+        }
+        else{
+            System.out.println("Produto não encontrado.");
+            return null;
+        }
+    }
 
 
 }
