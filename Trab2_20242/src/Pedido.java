@@ -34,6 +34,7 @@ public class Pedido {
 //Status: Em aberto
 //Valor total: R$39,00
     public String toString(){
+        System.out.println("Pedido do(a) " + getCliente().toString());
         String msg = "Código do Pedido: " + this.cod + "\n" +
                 "Produtos:\n";
             for (Item i : carrinho) {
