@@ -71,10 +71,8 @@ public class Sistema {
 
     //Gerar código dos produtos
     public String gerarCodigoProduto() {
-        //Igualar valor ao número de produtos existentes
-        int QuantidadeDeProdutos = this.prods.size();
         //Incrementar 1 ao número de produtos existentes
-        int novoCodigo = QuantidadeDeProdutos + 1;
+        int novoCodigo = this.prods.size() + 1;
         return "PROD-" + novoCodigo;
     }
 
@@ -84,7 +82,7 @@ public class Sistema {
         int QuantidadeDePedidos = this.pedidos.size();
         //Incrementar 1 a quantidade de pedidos
         int novoPedido = QuantidadeDePedidos + 1;
-        return "PED-" + novoPedido;
+        return "PEDIDO-" + novoPedido;
     }
 
     //Exibir produtos registrados

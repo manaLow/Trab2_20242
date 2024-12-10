@@ -228,14 +228,14 @@ public class Entrada {
             codigo = s.gerarCodigoProduto();
         }
 
-        String nome = this.lerLinha("Digite o nome do produto: "); //Verificar se existe o mesmo nome em outro produto?
-        int qtd = this.lerInteiro("Digite a quantidade desse produto no estoque: ");
-        double valor = this.lerDouble("Digite o valor do produto: ");
+        String nome = this.lerLinha("Digite o nome do produto: \n"); //Verificar se existe o mesmo nome em outro produto?
+        int qtd = this.lerInteiro("Digite a quantidade desse produto no estoque: \n");
+        double valor = this.lerDouble("Digite o valor do produto: \n");
 
         Produto prod = new Produto(codigo, nome, qtd, valor); //CONSTRUTOR CRIADO
         s.addProd(prod); //CRIAR MET NO SISTEMA.
 
-        System.out.println("Produto-" + prod.toString() + " criado com sucesso");
+        System.out.println("Produto " + prod.toString() + " criado com sucesso");
     }
 
 
@@ -279,7 +279,7 @@ public class Entrada {
 
         while (op == 1) {
             s.listarProdutos(); // Mostra os produtos disponíveis
-            Item item = lerItem(s);
+            Item item = this.lerItem(s);
             if(p.valorTotal() <= a.getSaldo()){
                 p.adicionarItem(item);
                 System.out.println("Produto adicionado ao carrinho: " + item.toString());
@@ -364,6 +364,7 @@ public class Entrada {
                 return prod; // Retorna o produto se encontrar
             }
         }
+        System.out.println("Produto não encontrado.");
         return null; // Retorna null se não encontrar
     }
 
