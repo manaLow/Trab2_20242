@@ -46,7 +46,7 @@ public class Pedido {
             else {
                 msg += "Em aberto\n";
             }
-            msg += "Valor Total: R$" + String.format("%2f",this.valorTotal()) + "\n";
+            msg += "Valor Total: R$" + String.format("%.2f",this.valorTotal()) + "\n";
             return msg;
     }
 
@@ -86,7 +86,7 @@ public class Pedido {
     }
 
     public double valorTotal(){
-        double valorPedido = 0;
+        double valorPedido = 1; //Taxa de entrega
         for(Item item : carrinho){
             valorPedido += item.valorTotal();
         }
@@ -95,10 +95,13 @@ public class Pedido {
 
     //Atualizar o saldo e o estoque do produto adquirido
     public void confirmar(){
-        for(Item item: carrinho){
-            item.getP().retirarDeEstoque(item.getQuantidade());
+
+        if(cliente.retirarSaldo(this.valorTotal())) {
+
+            for (Item item : carrinho) {
+                item.getP().retirarDeEstoque(item.getQuantidade());
+            }
         }
-        cliente.retirarSaldo(this.valorTotal());
         // output da confirmação
     }
 

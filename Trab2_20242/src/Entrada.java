@@ -280,6 +280,8 @@ public class Entrada {
         while (op == 1) {
             s.listarProdutos(); // Mostra os produtos disponíveis
             Item item = this.lerItem(s);
+
+
             if(p.valorTotal() <= a.getSaldo()){
                 p.adicionarItem(item);
                 System.out.println("Produto adicionado ao carrinho: " + item.toString());
@@ -292,10 +294,14 @@ public class Entrada {
         }
 
         if (op == 2) {
-            s.addPedido(p);
-            p.confirmar();
-            System.out.println("Pedido finalizado.");
-
+            if((p.valorTotal() <= a.getSaldo())) {
+                s.addPedido(p);
+                p.confirmar();
+                System.out.println("Pedido finalizado.");
+            }
+            else{
+                System.out.println("Saldo insuficiente. Pedido cancelado automaticamente.");
+            }
         } else {
             System.out.println("Opção inválida.");
         }
